@@ -51,30 +51,30 @@ class Queen(Figure):
                 horizontal_addon = -1
             
             max_movement_range = range(abs(current_pos[1] - target_pos[1]) + 1)[1:]
-            print(max_movement_range)
+
             # Iterate through everything except own figure
             for movement_range in max_movement_range:
                 
                 position = positions[current_pos[0]][current_pos[1] + movement_range * horizontal_addon]
- 
-                print('pos: ' + str(position) + ' y: ' + str(current_pos[0]) + ' | x: ' + str(current_pos[1] + movement_range * horizontal_addon))
 
                 if position != None:
+                    return position.grp != self.grp and movement_range == len(max_movement_range)
+                    """
                     if position.grp != self.grp:
                         if movement_range == len(max_movement_range):
         
                             return True
         
                     return False
-                        
+                    """    
             return True
         
         # vertical '1-n' range
         if current_pos[0] != target_pos[0] and current_pos[1] == target_pos[1]:
 
-            vertical_addon = -1
-            if self.grp:
-                vertical_addon = 1
+            vertical_addon = 1
+            if current_pos[0] > target_pos[0]:
+                vertical_addon = -1
 
             max_movement_range = range(abs(current_pos[0] - target_pos[0]) + 1)[1:]
             
@@ -84,13 +84,16 @@ class Queen(Figure):
                 position = positions[current_pos[0] + movement_range * vertical_addon][current_pos[1]]
 
                 if position != None:
+                    # if its an enemy and the last movement in range, it works
+                    return position.grp != self.grp and movement_range == len(max_movement_range)
+                    """
                     if position.grp != self.grp:
                         if movement_range == len(max_movement_range):
         
                             return True
         
                     return False
-                        
+                    """    
             return True
 
         # diagonal movement

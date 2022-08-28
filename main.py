@@ -11,7 +11,7 @@ import math
 
 win = pygame.display.set_mode((500, 500))
 pygame.display.set_caption('Chess')
-pygame.display.set_icon(pygame.image.load('assets/images/chess_logo.jpg'))
+pygame.display.set_icon(pygame.image.load('assets/images/chess_logo.png'))
 
 Grid = Grid(500, 8, (255,255,255), (0,0,0))
 
@@ -47,12 +47,12 @@ def isCheck(chessboard):
 
 chessboard = [
     [Rook(True), Knight(True), Bishop(True), Queen(True), King(True), Bishop(True), Knight(True), Rook(True)],
-    [Pawn(True), Pawn(True), Pawn(True), None, Pawn(True), Pawn(True), Pawn(True), Pawn(True)],
+    [Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True)],
     [None, None, None, None, None, None, None, None],
-    [None, Pawn(True), None, None, None, None, None, None],
-    [Queen(False), None, None, Pawn(True), None, None, None, Queen(False)],
     [None, None, None, None, None, None, None, None],
-    [Pawn(False), Pawn(False), Pawn(False), None, Pawn(False), Pawn(False), Pawn(False), Pawn(False)],
+    [None, None, None, None, None, None, None, None],
+    [None, None, None, None, None, None, None, None],
+    [Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False)],
     [Rook(False), Knight(False), Bishop(False), Queen(False), King(False), Bishop(False), Knight(False), Rook(False)]
 ]
 
@@ -92,7 +92,7 @@ while True:
                     chessboard_copy[target_y][target_x] = chessboard_copy[mouse_y][mouse_x]
                     chessboard_copy[mouse_y][mouse_x] = None
 
-                    if True:
+                    if not isCheck(chessboard_copy):
                         
                         chessboard = chessboard_copy
 

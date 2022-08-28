@@ -36,9 +36,10 @@ class Grid():
         for y, row in enumerate(chessboard):
             for x, figure in enumerate(row):
                 if figure != None:
-                    color = (255,0,0)
+                    color = 'B'
                     if not figure.grp:
-                        color = (0,0,255)
+                        color = 'W'
 
-                    img = font.render(figureImages.get(type(figure)), True, color)
+                    # img = font.render(figureImages.get(type(figure)), True, color)
+                    img = pygame.image.load('assets/images/figures/' + str(figureImages.get(type(figure))) + color + '.png')
                     win.blit(img, (x * self.field_size, y * self.field_size))
