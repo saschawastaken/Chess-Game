@@ -30,11 +30,6 @@ class Queen(Figure):
                         return False
                     
             return True"""
-        
-        
-        vertical_addon = -1
-        if self.grp:
-            vertical_addon = 1
 
     
         # '1' range
@@ -45,40 +40,55 @@ class Queen(Figure):
                 if positions[target_pos[0]][target_pos[1]] != None:
                     
                     if positions[target_pos[0]][target_pos[1]].grp == self.grp:
-                        print('TRUE')
                         return False
                 return True
 
         # horizontal '1-n' range
         if current_pos[0] == target_pos[0] and current_pos[1] != target_pos[1]:
             
-            max_movement_range = range(abs(current_pos[0] - target_pos[0]))[1:]
-
+            horizontal_addon = 1
+            if current_pos[1] > target_pos[1]:
+                horizontal_addon = -1
+            
+            max_movement_range = range(abs(current_pos[1] - target_pos[1]) + 1)[1:]
+            print(max_movement_range)
             # Iterate through everything except own figure
             for movement_range in max_movement_range:
                 
-                position = positions[current_pos[0]][current_pos[1] + movement_range * vertical_addon]
+                position = positions[current_pos[0]][current_pos[1] + movement_range * horizontal_addon]
+ 
+                print('pos: ' + str(position) + ' y: ' + str(current_pos[0]) + ' | x: ' + str(current_pos[1] + movement_range * horizontal_addon))
 
                 if position != None:
-                    if position.grp != self.grp: continue
-
+                    if position.grp != self.grp:
+                        if movement_range == len(max_movement_range):
+        
+                            return True
+        
                     return False
                         
             return True
         
         # vertical '1-n' range
         if current_pos[0] != target_pos[0] and current_pos[1] == target_pos[1]:
-            
-            max_movement_range = range(abs(current_pos[0] - target_pos[0]))[1:]
 
+            vertical_addon = -1
+            if self.grp:
+                vertical_addon = 1
+
+            max_movement_range = range(abs(current_pos[0] - target_pos[0]) + 1)[1:]
+            
             # Iterate through everything except own figure
             for movement_range in max_movement_range:
                 
                 position = positions[current_pos[0] + movement_range * vertical_addon][current_pos[1]]
 
                 if position != None:
-                    if position.grp != self.grp: continue
-
+                    if position.grp != self.grp:
+                        if movement_range == len(max_movement_range):
+        
+                            return True
+        
                     return False
                         
             return True

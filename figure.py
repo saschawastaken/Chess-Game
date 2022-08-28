@@ -10,5 +10,3 @@ class Figure():
         if target_pos_tuple[1] > 7: target_pos_list[1] = 7
         if includeFriendly: return positions[target_pos_list[0]][target_pos_list[1]] != None
         else: return positions[target_pos_list[0]][target_pos_list[1]] != None and positions[target_pos_list[0]][target_pos_list[1]].grp != self.grp
-        
-

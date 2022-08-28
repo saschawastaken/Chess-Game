@@ -47,12 +47,12 @@ def isCheck(chessboard):
 
 chessboard = [
     [Rook(True), Knight(True), Bishop(True), Queen(True), King(True), Bishop(True), Knight(True), Rook(True)],
-    [Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True)],
+    [Pawn(True), Pawn(True), Pawn(True), None, Pawn(True), Pawn(True), Pawn(True), Pawn(True)],
     [None, None, None, None, None, None, None, None],
+    [None, Pawn(True), None, None, None, None, None, None],
+    [Queen(False), None, None, Pawn(True), None, None, None, Queen(False)],
     [None, None, None, None, None, None, None, None],
-    [None, None, None, None, None, None, None, None],
-    [None, None, None, None, None, None, None, None],
-    [Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False)],
+    [Pawn(False), Pawn(False), Pawn(False), None, Pawn(False), Pawn(False), Pawn(False), Pawn(False)],
     [Rook(False), Knight(False), Bishop(False), Queen(False), King(False), Bishop(False), Knight(False), Rook(False)]
 ]
 
