@@ -48,10 +48,10 @@ def isCheck(chessboard):
 chessboard = [
     [Rook(True), Knight(True), Bishop(True), Queen(True), King(True), Bishop(True), Knight(True), Rook(True)],
     [Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True)],
+    [None, None, Pawn(True), None, None, None, None, None],
+    [None, None, None, Pawn(True), None, None, None, None],
     [None, None, None, None, None, None, None, None],
-    [None, None, None, None, None, None, None, None],
-    [None, None, None, None, None, None, None, None],
-    [None, None, None, None, None, None, None, None],
+    [None, None, None, None, None, Queen(False), None, None],
     [Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False)],
     [Rook(False), Knight(False), Bishop(False), Queen(False), King(False), Bishop(False), Knight(False), Rook(False)]
 ]
@@ -85,14 +85,14 @@ while True:
                             target_x = math.floor(target_pos[0] / Grid.field_size)
                             target_y = math.floor(target_pos[1] / Grid.field_size)
 
-                if selectedFigure.isMoveValid((mouse_y, mouse_x), (target_y, target_x), chessboard):
+                if (mouse_y, mouse_x) != (target_y, target_x) and selectedFigure.isMoveValid((mouse_y, mouse_x), (target_y, target_x), chessboard):
                 
                     chessboard_copy = chessboard.copy()
 
                     chessboard_copy[target_y][target_x] = chessboard_copy[mouse_y][mouse_x]
                     chessboard_copy[mouse_y][mouse_x] = None
 
-                    if not isCheck(chessboard_copy):
+                    if not False: # isCheck(chessbaord)
                         
                         chessboard = chessboard_copy
 
