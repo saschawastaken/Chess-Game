@@ -10,7 +10,6 @@ class King(Figure):
                 if positions[target_pos[0]][target_pos[1]] != None:
                     
                     if positions[target_pos[0]][target_pos[1]].grp == self.grp:
-                        print('TRUE')
                         return False
                 return True
 

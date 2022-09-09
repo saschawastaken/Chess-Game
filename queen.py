@@ -3,34 +3,6 @@ from figure import Figure
 class Queen(Figure):
 
     def isMoveValid(self, current_pos, target_pos, positions):
-        """
-        if current_pos[0] == target_pos[0] and current_pos[1] != target_pos[1]:
-            print("1")
-            max_movement_range = abs(current_pos[1] - target_pos[1])
-            print("diff x: " + str(max_movement_range))
-            
-            for i in range(max_movement_range)[1:]:
-                if positions[current_pos[0]][i] != None:
-                    if positions[current_pos[0]][i].grp == self.grp:
-                        print(positions[current_pos[0]][i])
-                        return False
-                    
-            return True
-        
-        if current_pos[0] != target_pos[0] and current_pos[1] == target_pos[1]:
-            print("2")
-            max_movement_range = abs(current_pos[0] - target_pos[0])
-            print("diff y: " + str(max_movement_range))
-
-            for i in range(max_movement_range)[1:]:
-                if positions[target_pos[0] + i][current_pos[1]] != None:
-                    if positions[target_pos[0] + i][current_pos[1]].grp == self.grp:
-                        print(target_pos[0] + i)
-                        print(positions[i][current_pos[1]])
-                        return False
-                    
-            return True"""
-
     
         # '1' range
         movements = [(1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1)]
@@ -59,14 +31,7 @@ class Queen(Figure):
 
                 if position != None:
                     return position.grp != self.grp and movement_range == len(max_movement_range)
-                    """
-                    if position.grp != self.grp:
-                        if movement_range == len(max_movement_range):
-        
-                            return True
-        
-                    return False
-                    """    
+
             return True
         
         # vertical '1-n' range
@@ -86,14 +51,7 @@ class Queen(Figure):
                 if position != None:
                     # if its an enemy and the last movement in range, it works
                     return position.grp != self.grp and movement_range == len(max_movement_range)
-                    """
-                    if position.grp != self.grp:
-                        if movement_range == len(max_movement_range):
-        
-                            return True
-        
-                    return False
-                    """    
+                    
             return True
 
         # diagonal movement
@@ -115,26 +73,14 @@ class Queen(Figure):
 
                 pos[0] += vertical_addition
                 pos[1] += horizontal_addition
-
-                """
-                position = positions[pos[0]][pos[1]]
-
-                if  position != None:
-                
-                    print(position)
-                    return False
-                """
             
             max_movement_range = range(max_movement_range + 1)[1:]
-
-            print('mf' + str(max_movement_range))
             
             for movement_range in max_movement_range:
                 position = positions[current_pos[0] + vertical_addition * movement_range][current_pos[1] + horizontal_addition * movement_range]
 
                 if position != None:
                     # if its an enemy and the last movement in range, it works
-                    print(str(movement_range) + ' | ' + str(len(max_movement_range)))
                     return position.grp != self.grp and movement_range == len(max_movement_range)
 
             return True
