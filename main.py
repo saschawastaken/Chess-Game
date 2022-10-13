@@ -17,14 +17,14 @@ TURN = False
 GAME_OVER = False
 
 chessboard = [
-    [Rook(True), Knight(True), Bishop(True), Queen(True), King(True), Bishop(True), Knight(True), Rook(True)],
-    [Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True)],
+    [Rook(True), Knight(True), Bishop(True), Queen(True), King(True), Bishop(True), None, None],
+    [Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(False)],
     [None, None, None, None, None, None, None, None],
     [None, None, None, None, None, None, None, None],
     [None, None, None, None, None, None, None, None],
     [None, None, None, None, None, None, None, None],
-    [Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False)],
-    [Rook(False), Knight(False), Bishop(False), Queen(False), King(False), Bishop(False), Knight(False), Rook(False)]
+    [Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(True)],
+    [Rook(False), Knight(False), Bishop(False), Queen(False), King(False), Bishop(False), None, None]
 ]
 
 Grid = Grid(500, 8, (255,255,255), (0,0,0))
@@ -47,7 +47,7 @@ def getKingPos(chessboard, grp):
                 return (y, x)
 
 def isCheck(chessboard, latest_turn):
-    # GET THE POSITION OF THE KING    
+   
     king_grp = not latest_turn
     king_pos = getKingPos(chessboard, king_grp)
 
@@ -94,7 +94,7 @@ while not GAME_OVER:
             quit(0)
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = pygame.mouse.get_pos()
-            # get clicked field positions
+            # Get clicked field positions
             mouse_x = math.floor(mouse_pos[0] / Grid.field_size)
             mouse_y = math.floor(mouse_pos[1] / Grid.field_size)
 
@@ -117,7 +117,12 @@ while not GAME_OVER:
                 
                     chessboard_copy = copy2dArray(chessboard)
 
-                    chessboard_copy[target_y][target_x] = chessboard_copy[mouse_y][mouse_x]
+                    # Pawn Promotion
+                    if type(selectedFigure) == Pawn and selectedFigure.grp and target_y == 7 or type(selectedFigure) == Pawn and not selectedFigure.grp and target_y == 0:
+                        chessboard_copy[target_y][target_x] = Queen(selectedFigure.grp)
+                    else:
+                        chessboard_copy[target_y][target_x] = chessboard_copy[mouse_y][mouse_x]
+
                     chessboard_copy[mouse_y][mouse_x] = None
 
                     if not isCheck(chessboard_copy, not TURN): 
