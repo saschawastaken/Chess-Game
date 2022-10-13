@@ -23,60 +23,53 @@ def copy2dArray(array):
         cp.append(row.copy())
     return cp
 
-def isCheck(chessboard):
+def getKingPos(chessboard, grp):
+    for y, row in enumerate(chessboard):
+        for x, figure in enumerate(row):
+            if type(figure) == King and figure.grp == grp:
+                return (y, x)
 
-    # Get the positions of kings
-    king_1_pos = (0, 0)
-    king_2_pos = (0, 0)
+def isCheck(chessboard, latest_turn):
+
+    # GET THE POSITION OF THE KING    
+    king_grp = not latest_turn
+    king_pos = getKingPos(chessboard, king_grp)
+
+    # print(king_pos)
 
     for y, row in enumerate(chessboard):
         for x, figure in enumerate(row):
-            if type(figure) == King:
-                if figure.grp:
-                    king_1_pos = (y, x)
-                else:
-                    king_2_pos = (y, x)
+            if figure != None and figure.grp == latest_turn:
+                if figure.isMoveValid((y, x), king_pos, chessboard):
+                    return True
 
-    # Now check if an enemy figure can move on king
-    for y, row in enumerate(chessboard):
-        for x, figure in enumerate(row):
-            if figure != None:
-                if type(figure) == Queen and figure.grp == False:
-                    """
-                    print(figure.isMoveValid((y, x), king_1_pos, chessboard))
-                    print(figure.grp)
-                    """
-                if figure.grp:
-                    if figure.isMoveValid((y, x), king_2_pos, chessboard):
-                        return (True, king_2_pos)
-                else:
-                    if figure.isMoveValid((y, x), king_1_pos, chessboard):
-                        return (True, king_1_pos)
-    
-    return (False, None)
+    return False
 
-def isCheckMate(chessboard, checked_king_pos):
+def isCheckMate(chessboard, latest_turn):
 
-    checkedKing = chessboard[checked_king_pos[0]][checked_king_pos[1]]        
+    if isCheck(chessboard, latest_turn):
 
-    for y, row in enumerate(chessboard):
-        for x, figure in enumerate(row):
-            if figure != None and figure.grp == checkedKing.grp:
-                
-                for pos_y in range(8):
-                    for pos_x in range(8):
-                        if figure.isMoveValid((y, x), (pos_y, pos_x), chessboard):
-                            
-                            chessboard_copy = copy2dArray(chessboard)
+        king_grp = not latest_turn
 
-                            chessboard_copy[pos_y][pos_x] = chessboard_copy[y][x]
-                            chessboard_copy[y][x] = None
+        for y, row in enumerate(chessboard):
+            for x, figure in enumerate(row):
+                if figure != None and figure.grp == king_grp:
 
-                            if not isCheck(chessboard_copy):
-                                return False
-    
-    return True
+                    for target_y in range(8):
+                        for target_x in range(8):
+                            if figure.isMoveValid((y, x), (target_y, target_x), chessboard):
+                                chessboard_copy = copy2dArray(chessboard)
 
+                                chessboard_copy[y][x] = None
+                                chessboard_copy[target_y][target_x] = figure
+
+                                if not isCheck(chessboard_copy, latest_turn):
+                                    saving_chessboard = chessboard_copy
+                                    return False
+        
+        return True
+
+    return False
 
 chessboard = [
     [Rook(True), Knight(True), Bishop(True), Queen(True), King(True), Bishop(True), Knight(True), Rook(True)],
@@ -90,11 +83,16 @@ chessboard = [
 ]
 
 PLAYERS = {0 : 'White', 1 : 'Black'}
-TURN = True
+TURN = False
 GAME_OVER = False
 
 while not GAME_OVER:
 
+    if isCheckMate(chessboard, not TURN):
+        print('CheckMate')
+        GAME_OVER = True
+        break
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             quit(0)
@@ -121,25 +119,20 @@ while not GAME_OVER:
 
                 if (mouse_y, mouse_x) != (target_y, target_x) and selectedFigure.isMoveValid((mouse_y, mouse_x), (target_y, target_x), chessboard):
                 
-                    chessboard_copy = chessboard.copy()
+                    chessboard_copy = copy2dArray(chessboard)
 
                     chessboard_copy[target_y][target_x] = chessboard_copy[mouse_y][mouse_x]
                     chessboard_copy[mouse_y][mouse_x] = None
 
+                    
                     # Check
-                    func_check = isCheck(chessboard)
-                    checked = func_check[0]
-
-                    if not checked: 
+                    if not isCheck(chessboard_copy, not TURN): 
                         chessboard = chessboard_copy
+                        TURN = not TURN
 
                     else:
-                        checked_king_pos = func_check[1]
-                        if isCheckMate(chessboard, checked_king_pos):
-                            GAME_OVER = True
-                            break
-
-                    TURN = not TURN
+                        print('Check!')
+                    
                 else:
                     print('INVALID MOVE')
                 
@@ -153,7 +146,9 @@ while not GAME_OVER:
 
     pygame.display.update()
 
-text = 'Player ' + PLAYERS[not chessboard[checked_king_pos[0]][checked_king_pos[1]].grp] + ' won!'
+king_pos = getKingPos(chessboard, not TURN)
+
+text = "Player " + PLAYERS[chessboard[king_pos[0]][king_pos[1]].grp] + " won!"
 
 while True:
     for event in pygame.event.get():

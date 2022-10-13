@@ -52,3 +52,5 @@ class Rook(Figure):
                     return position.grp != self.grp and movement_range == len(max_movement_range)
 
             return True
+        
+        return False
