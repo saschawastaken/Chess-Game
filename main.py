@@ -11,11 +11,28 @@ from grid import Grid
 import math
 import time
 
+# Game Logic
+PLAYERS = {0 : 'White', 1 : 'Black'}
+TURN = False
+GAME_OVER = False
+
+chessboard = [
+    [Rook(True), Knight(True), Bishop(True), Queen(True), King(True), Bishop(True), Knight(True), Rook(True)],
+    [Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True)],
+    [None, None, None, None, None, None, None, None],
+    [None, None, None, None, None, None, None, None],
+    [None, None, None, None, None, None, None, None],
+    [None, None, None, None, None, None, None, None],
+    [Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False)],
+    [Rook(False), Knight(False), Bishop(False), Queen(False), King(False), Bishop(False), Knight(False), Rook(False)]
+]
+
+Grid = Grid(500, 8, (255,255,255), (0,0,0))
+
+# Screen
 win = pygame.display.set_mode((500, 500))
 pygame.display.set_caption('Chess')
 pygame.display.set_icon(pygame.image.load('assets/images/chess_logo.png'))
-
-Grid = Grid(500, 8, (255,255,255), (0,0,0))
 
 def copy2dArray(array):
     cp = []
@@ -30,12 +47,9 @@ def getKingPos(chessboard, grp):
                 return (y, x)
 
 def isCheck(chessboard, latest_turn):
-
     # GET THE POSITION OF THE KING    
     king_grp = not latest_turn
     king_pos = getKingPos(chessboard, king_grp)
-
-    # print(king_pos)
 
     for y, row in enumerate(chessboard):
         for x, figure in enumerate(row):
@@ -54,7 +68,6 @@ def isCheckMate(chessboard, latest_turn):
         for y, row in enumerate(chessboard):
             for x, figure in enumerate(row):
                 if figure != None and figure.grp == king_grp:
-
                     for target_y in range(8):
                         for target_x in range(8):
                             if figure.isMoveValid((y, x), (target_y, target_x), chessboard):
@@ -64,32 +77,15 @@ def isCheckMate(chessboard, latest_turn):
                                 chessboard_copy[target_y][target_x] = figure
 
                                 if not isCheck(chessboard_copy, latest_turn):
-                                    saving_chessboard = chessboard_copy
                                     return False
         
         return True
 
     return False
 
-chessboard = [
-    [Rook(True), Knight(True), Bishop(True), Queen(True), King(True), Bishop(True), Knight(True), Rook(True)],
-    [Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True), Pawn(True)],
-    [None, None, None, None, None, None, None, None],
-    [None, None, None, None, None, None, None, None],
-    [None, None, None, None, None, None, None, None],
-    [None, None, None, None, None, None, None, None],
-    [Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False), Pawn(False)],
-    [Rook(False), Knight(False), Bishop(False), Queen(False), King(False), Bishop(False), Knight(False), Rook(False)]
-]
-
-PLAYERS = {0 : 'White', 1 : 'Black'}
-TURN = False
-GAME_OVER = False
-
 while not GAME_OVER:
 
     if isCheckMate(chessboard, not TURN):
-        print('CheckMate')
         GAME_OVER = True
         break
     
@@ -124,20 +120,15 @@ while not GAME_OVER:
                     chessboard_copy[target_y][target_x] = chessboard_copy[mouse_y][mouse_x]
                     chessboard_copy[mouse_y][mouse_x] = None
 
-                    
-                    # Check
                     if not isCheck(chessboard_copy, not TURN): 
                         chessboard = chessboard_copy
                         TURN = not TURN
-
-                    else:
-                        print('Check!')
                     
                 else:
-                    print('INVALID MOVE')
+                    print('Invalid move')
                 
             else:
-                print('INVALID FIGURE')
+                print('Invalid figure')
 
     win.fill((255,255,255))
 
